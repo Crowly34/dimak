@@ -8,11 +8,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use OwenIt\Auditing\Contracts\Auditable;
 
-class Order extends Model
+class Order extends Model implements Auditable
 {
     /** @use HasFactory<\Database\Factories\OrderFactory> */
     use HasFactory;
+
+    use \OwenIt\Auditing\Auditable;
 
     protected $fillable = [
         'folio',
@@ -30,22 +33,7 @@ class Order extends Model
         'delivered_at',
     ];
 
-    protected static function boot(): void
-    {
-        parent::boot();
-
-        static::updating(function (Order $order): void {
-            if ($order->isDirty('status')) {
-                OrderStatusLog::create([
-                    'order_id' => $order->id,
-                    'from_status' => $order->getOriginal('status'),
-                    'to_status' => $order->status instanceof OrderStatus
-                        ? $order->status->value
-                        : $order->status,
-                ]);
-            }
-        });
-    }
+    protected array $auditExclude = ['device_password'];
 
     protected function casts(): array
     {
