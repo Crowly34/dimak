@@ -1,0 +1,47 @@
+# Environment
+.env
+.env.backup
+.env.production
+.env.testing
+/auth.json
+
+# Dependencies
+/node_modules
+/vendor
+
+# Build artifacts
+/public/build
+/public/hot
+/public/storage
+
+# Laravel runtime
+/storage/*.key
+/storage/pail
+*.log
+
+# Testing
+.phpunit.result.cache
+/.phpunit.cache
+*.sqlite
+
+# IDE & editors
+/.fleet
+/.idea
+/.nova
+/.phpunit.cache
+/.vscode
+/.zed
+
+# OS
+.DS_Store
+Thumbs.db
+Homestead.json
+Homestead.yaml
+
+# AI tools (machine-specific config)
+/.claude/
+/.mcp.json
+/opencode.json
+
+# PHP tools
+.phpactor.json
