@@ -82,7 +82,7 @@ class ImportOrders extends Command
             [$status, $location, $deliveredAt] = $this->regexInfer($observations);
 
             $parsedReceivedAt = $this->parseDate($receivedAt);
-            $parsedDeliveredAt = $deliveredAt ?? null;
+            $parsedDeliveredAt = $deliveredAt;
 
             if ($this->option('dry-run')) {
                 $this->line(sprintf(
@@ -200,7 +200,7 @@ class ImportOrders extends Command
     private function findOrCreateClient(string $name, string $rawPhone): Client
     {
         $phones = array_filter(
-            array_map('trim', preg_split('/[\/,]/', $rawPhone)),
+            array_map('trim', preg_split('/[\/,]/', $rawPhone) ?: []),
             fn (string $p) => $p !== ''
         );
 

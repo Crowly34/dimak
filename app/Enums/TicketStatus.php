@@ -30,7 +30,7 @@ enum TicketStatus: string implements HasColor, HasLabel
         };
     }
 
-    public function getColor(): string|array|null
+    public function getColor(): string
     {
         return match ($this) {
             self::PendingDiagnosis => 'gray',

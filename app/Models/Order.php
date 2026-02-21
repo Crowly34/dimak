@@ -28,11 +28,13 @@ class Order extends Model implements Auditable
         ];
     }
 
+    /** @return BelongsTo<Client, $this> */
     public function client(): BelongsTo
     {
         return $this->belongsTo(Client::class);
     }
 
+    /** @return HasMany<Ticket, $this> */
     public function tickets(): HasMany
     {
         return $this->hasMany(Ticket::class);

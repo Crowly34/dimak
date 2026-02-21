@@ -46,7 +46,7 @@ class TicketsRelationManager extends RelationManager
                     ->revealable()
                     ->dehydrateStateUsing(fn (?string $state): ?string => $state !== null && $state !== '' ? encrypt($state) : null)
                     ->afterStateHydrated(function (TextInput $component, mixed $state): void {
-                        if ($state !== null && $state !== '') {
+                        if (is_string($state) && $state !== '') {
                             try {
                                 $component->state(decrypt($state));
                             } catch (\Throwable) {
@@ -122,13 +122,9 @@ class TicketsRelationManager extends RelationManager
                             ->label('Note (optional)'),
                     ])
                     ->action(function (Ticket $record, array $data): void {
-                        $fromStatus = $record->status instanceof TicketStatus
-                            ? $record->status->value
-                            : $record->status;
-
                         TicketStatusLog::create([
                             'ticket_id' => $record->id,
-                            'from_status' => $fromStatus,
+                            'from_status' => $record->status->value,
                             'to_status' => $data['status'],
                             'note' => $data['note'] ?? null,
                         ]);

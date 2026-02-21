@@ -41,9 +41,12 @@ class OrdersTable
                         \Filament\Forms\Components\DatePicker::make('until')->label('Received until'),
                     ])
                     ->query(function (Builder $query, array $data): Builder {
+                        $from = is_string($data['from']) ? $data['from'] : null;
+                        $until = is_string($data['until']) ? $data['until'] : null;
+
                         return $query
-                            ->when($data['from'], fn (Builder $q) => $q->whereDate('received_at', '>=', $data['from']))
-                            ->when($data['until'], fn (Builder $q) => $q->whereDate('received_at', '<=', $data['until']));
+                            ->when($from, fn (Builder $q) => $q->whereDate('received_at', '>=', $from))
+                            ->when($until, fn (Builder $q) => $q->whereDate('received_at', '<=', $until));
                     }),
             ])
             ->recordActions([

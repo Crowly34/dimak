@@ -10,6 +10,10 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use OwenIt\Auditing\Contracts\Auditable;
 
+/**
+ * @property TicketStatus $status
+ * @property TicketLocation $location
+ */
 class Ticket extends Model implements Auditable
 {
     /** @use HasFactory<\Database\Factories\TicketFactory> */
@@ -31,6 +35,7 @@ class Ticket extends Model implements Auditable
         'paid',
     ];
 
+    /** @var array<string> */
     protected array $auditExclude = ['device_password'];
 
     protected function casts(): array
@@ -46,18 +51,28 @@ class Ticket extends Model implements Auditable
 
     public function getDecryptedDevicePasswordAttribute(): ?string
     {
+        $password = $this->device_password;
+
+        if (! is_string($password) || $password === '') {
+            return null;
+        }
+
         try {
-            return decrypt($this->device_password);
+            $decrypted = decrypt($password);
+
+            return is_string($decrypted) ? $decrypted : null;
         } catch (\Throwable) {
             return null;
         }
     }
 
+    /** @return BelongsTo<Order, $this> */
     public function order(): BelongsTo
     {
         return $this->belongsTo(Order::class);
     }
 
+    /** @return HasMany<TicketStatusLog, $this> */
     public function statusLogs(): HasMany
     {
         return $this->hasMany(TicketStatusLog::class);
