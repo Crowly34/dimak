@@ -45,3 +45,5 @@ Homestead.yaml
 
 # PHP tools
 .phpactor.json
+/AGENTS.md
+/CLAUDE.md
