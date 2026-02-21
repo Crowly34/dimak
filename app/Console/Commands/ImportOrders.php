@@ -116,8 +116,6 @@ class ImportOrders extends Command
                 'observations' => $observations ?: null,
                 'status' => $status,
                 'location' => $location,
-                'price' => null,
-                'paid' => false,
                 'delivered_at' => $parsedDeliveredAt,
             ]);
 

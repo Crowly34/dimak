@@ -41,14 +41,10 @@ test('location is cast to TicketLocation', function (): void {
     expect($casts['location'])->toBe(TicketLocation::class);
 });
 
-test('price is cast to decimal', function (): void {
-    $casts = (new Ticket)->getCasts();
-
-    expect($casts['price'])->toBe('decimal:2');
+test('ticket no longer has price attribute', function (): void {
+    expect((new Ticket)->getFillable())->not->toContain('price');
 });
 
-test('paid is cast to boolean', function (): void {
-    $casts = (new Ticket)->getCasts();
-
-    expect($casts['paid'])->toBe('boolean');
+test('ticket no longer has paid attribute', function (): void {
+    expect((new Ticket)->getFillable())->not->toContain('paid');
 });

@@ -6,6 +6,7 @@ use Filament\Forms\Components\DatePicker;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\Toggle;
 use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Schema;
 
@@ -33,6 +34,13 @@ class OrderForm
                 ]),
                 DatePicker::make('received_at')
                     ->default(now()),
+                Grid::make(2)->schema([
+                    TextInput::make('price')
+                        ->numeric()
+                        ->prefix('$'),
+                    Toggle::make('paid')
+                        ->inline(false),
+                ]),
             ]);
     }
 }

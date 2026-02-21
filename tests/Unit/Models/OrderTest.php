@@ -25,3 +25,19 @@ test('order no longer has status attribute', function (): void {
 
     expect($fillable)->not->toContain('status');
 });
+
+test('order has price attribute', function (): void {
+    expect((new Order)->getFillable())->toContain('price');
+});
+
+test('order has paid attribute', function (): void {
+    expect((new Order)->getFillable())->toContain('paid');
+});
+
+test('price is cast to decimal on order', function (): void {
+    expect((new Order)->getCasts()['price'])->toBe('decimal:2');
+});
+
+test('paid is cast to boolean on order', function (): void {
+    expect((new Order)->getCasts()['paid'])->toBe('boolean');
+});

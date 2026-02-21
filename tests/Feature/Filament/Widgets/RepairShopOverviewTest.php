@@ -2,6 +2,7 @@
 
 use App\Enums\TicketStatus;
 use App\Filament\Widgets\RepairShopOverview;
+use App\Models\Order;
 use App\Models\Ticket;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
@@ -53,11 +54,16 @@ test('ready for pickup stat counts only ready tickets', function (): void {
     expect($count)->toBe(4);
 });
 
-test('unpaid ready stat excludes paid tickets', function (): void {
-    Ticket::factory()->count(3)->create(['status' => TicketStatus::Ready->value, 'paid' => false]);
-    Ticket::factory()->count(2)->create(['status' => TicketStatus::Ready->value, 'paid' => true]);
+test('unpaid ready stat excludes tickets whose order is paid', function (): void {
+    $unpaidOrder = Order::factory()->create(['paid' => false]);
+    $paidOrder = Order::factory()->create(['paid' => true]);
 
-    $count = Ticket::where('status', TicketStatus::Ready->value)->where('paid', false)->count();
+    Ticket::factory()->count(3)->create(['order_id' => $unpaidOrder->id, 'status' => TicketStatus::Ready->value]);
+    Ticket::factory()->count(2)->create(['order_id' => $paidOrder->id, 'status' => TicketStatus::Ready->value]);
+
+    $count = Ticket::where('status', TicketStatus::Ready->value)
+        ->whereHas('order', fn ($q) => $q->where('paid', false))
+        ->count();
 
     expect($count)->toBe(3);
 });

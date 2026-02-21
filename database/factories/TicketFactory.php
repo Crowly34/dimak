@@ -24,8 +24,6 @@ class TicketFactory extends Factory
             'observations' => fake()->optional()->paragraph(),
             'status' => fake()->randomElement(TicketStatus::cases())->value,
             'location' => TicketLocation::Shop->value,
-            'price' => fake()->optional()->randomFloat(2, 200, 5000),
-            'paid' => false,
         ];
     }
 

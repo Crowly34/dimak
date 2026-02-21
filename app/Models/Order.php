@@ -19,12 +19,16 @@ class Order extends Model implements Auditable
         'folio',
         'client_id',
         'received_at',
+        'price',
+        'paid',
     ];
 
     protected function casts(): array
     {
         return [
             'received_at' => 'date',
+            'price' => 'decimal:2',
+            'paid' => 'boolean',
         ];
     }
 

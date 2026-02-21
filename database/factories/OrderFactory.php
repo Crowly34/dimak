@@ -16,6 +16,8 @@ class OrderFactory extends Factory
             'folio' => fake()->unique()->numerify('####'),
             'client_id' => Client::factory(),
             'received_at' => fake()->dateTimeBetween('-1 year', 'now'),
+            'price' => fake()->optional()->randomFloat(2, 200, 5000),
+            'paid' => false,
         ];
     }
 }

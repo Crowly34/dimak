@@ -21,7 +21,7 @@ class RepairShopOverview extends StatsOverviewWidget
             Stat::make('Ready for Pickup', Ticket::where('status', TicketStatus::Ready->value)->count())
                 ->description('Repairs completed')
                 ->color('success'),
-            Stat::make('Unpaid Ready', Ticket::where('status', TicketStatus::Ready->value)->where('paid', false)->count())
+            Stat::make('Unpaid Ready', Ticket::where('status', TicketStatus::Ready->value)->whereHas('order', fn ($q) => $q->where('paid', false))->count())
                 ->description('Ready but not yet paid')
                 ->color('danger'),
         ];

@@ -31,8 +31,6 @@ class Ticket extends Model implements Auditable
         'observations',
         'status',
         'location',
-        'price',
-        'paid',
     ];
 
     /** @var array<string> */
@@ -44,8 +42,6 @@ class Ticket extends Model implements Auditable
             'status' => TicketStatus::class,
             'location' => TicketLocation::class,
             'delivered_at' => 'date',
-            'price' => 'decimal:2',
-            'paid' => 'boolean',
         ];
     }
 

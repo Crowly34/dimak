@@ -14,14 +14,15 @@ beforeEach(function (): void {
     $this->actingAs(User::factory()->create());
 });
 
-test('order form shows folio, client, received_at fields only', function (): void {
+test('order form shows folio, client, received_at, price, and paid fields', function (): void {
     livewire(CreateOrder::class)
         ->assertFormFieldExists('folio')
         ->assertFormFieldExists('client_id')
         ->assertFormFieldExists('received_at')
+        ->assertFormFieldExists('price')
+        ->assertFormFieldExists('paid')
         ->assertFormFieldDoesNotExist('device')
-        ->assertFormFieldDoesNotExist('status')
-        ->assertFormFieldDoesNotExist('price');
+        ->assertFormFieldDoesNotExist('status');
 });
 
 test('order table shows ticket count column', function (): void {
