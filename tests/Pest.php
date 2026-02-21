@@ -13,7 +13,14 @@
 
 pest()->extend(Tests\TestCase::class)
  // ->use(Illuminate\Foundation\Testing\RefreshDatabase::class)
-    ->in('Feature');
+    ->in('Feature', 'Unit');
+
+if (! function_exists('livewire')) {
+    function livewire(string $component, array $params = []): \Livewire\Features\SupportTesting\Testable
+    {
+        return \Livewire\Livewire::test($component, $params);
+    }
+}
 
 /*
 |--------------------------------------------------------------------------

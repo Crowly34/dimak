@@ -2,7 +2,8 @@
 
 namespace App\Filament\Widgets;
 
-use App\Models\Order;
+use App\Enums\TicketStatus;
+use App\Models\Ticket;
 use Filament\Widgets\StatsOverviewWidget;
 use Filament\Widgets\StatsOverviewWidget\Stat;
 
@@ -11,16 +12,16 @@ class RepairShopOverview extends StatsOverviewWidget
     protected function getStats(): array
     {
         return [
-            Stat::make('Open Orders', Order::whereNotIn('status', ['delivered', 'no_repair'])->count())
+            Stat::make('Open Tickets', Ticket::whereNotIn('status', [TicketStatus::Delivered->value, TicketStatus::NoRepair->value])->count())
                 ->description('Currently active repairs')
                 ->color('info'),
-            Stat::make('Waiting Parts', Order::where('status', 'waiting_part')->count())
+            Stat::make('Waiting Parts', Ticket::where('status', TicketStatus::WaitingPart->value)->count())
                 ->description('Pending part arrival')
                 ->color('warning'),
-            Stat::make('Ready for Pickup', Order::where('status', 'ready')->count())
+            Stat::make('Ready for Pickup', Ticket::where('status', TicketStatus::Ready->value)->count())
                 ->description('Repairs completed')
                 ->color('success'),
-            Stat::make('Unpaid Ready', Order::where('status', 'ready')->where('paid', false)->count())
+            Stat::make('Unpaid Ready', Ticket::where('status', TicketStatus::Ready->value)->where('paid', false)->count())
                 ->description('Ready but not yet paid')
                 ->color('danger'),
         ];

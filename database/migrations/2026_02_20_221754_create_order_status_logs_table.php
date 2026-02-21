@@ -1,31 +1,12 @@
 <?php
 
+// This migration has been superseded by 2026_02_21_005240_create_ticket_status_logs_table.php
+
 use Illuminate\Database\Migrations\Migration;
-use Illuminate\Database\Schema\Blueprint;
-use Illuminate\Support\Facades\Schema;
 
 return new class extends Migration
 {
-    /**
-     * Run the migrations.
-     */
-    public function up(): void
-    {
-        Schema::create('order_status_logs', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('order_id')->constrained()->cascadeOnDelete();
-            $table->string('from_status')->nullable();
-            $table->string('to_status');
-            $table->text('note')->nullable();
-            $table->timestamps();
-        });
-    }
+    public function up(): void {}
 
-    /**
-     * Reverse the migrations.
-     */
-    public function down(): void
-    {
-        Schema::dropIfExists('order_status_logs');
-    }
+    public function down(): void {}
 };

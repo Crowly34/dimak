@@ -5,7 +5,7 @@ namespace App\Enums;
 use Filament\Support\Contracts\HasColor;
 use Filament\Support\Contracts\HasLabel;
 
-enum OrderLocation: string implements HasColor, HasLabel
+enum TicketLocation: string implements HasColor, HasLabel
 {
     case Shop = 'shop';
     case Lab = 'lab';
