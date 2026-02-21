@@ -4,6 +4,7 @@ namespace App\Console\Commands;
 
 use App\Models\Client;
 use App\Models\Order;
+use App\Models\Ticket;
 use Illuminate\Console\Command;
 
 class ImportOrders extends Command
@@ -100,13 +101,17 @@ class ImportOrders extends Command
 
             $client = $this->findOrCreateClient($clientName, $clientPhone);
 
-            Order::create([
+            $order = Order::create([
                 'folio' => $folio,
                 'client_id' => $client->id,
+                'received_at' => $parsedReceivedAt,
+            ]);
+
+            Ticket::create([
+                'order_id' => $order->id,
                 'device' => $device ?: 'Unknown',
                 'device_serial' => $deviceSerial ?: null,
                 'device_password' => $devicePassword !== '' ? encrypt($devicePassword) : null,
-                'received_at' => $parsedReceivedAt,
                 'description' => $description ?: null,
                 'observations' => $observations ?: null,
                 'status' => $status,
