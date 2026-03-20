@@ -3,6 +3,9 @@
 .env.backup
 .env.production
 .env.testing
+
+# Google credentials
+storage/app/google-service-account.json
 /auth.json
 
 # Dependencies
