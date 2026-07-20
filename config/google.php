@@ -73,4 +73,17 @@ return [
     |
     */
     'config' => [],
+
+    /*
+    |----------------------------------------------------------------------------
+    | Google Sheets
+    |----------------------------------------------------------------------------
+    |
+    | Spreadsheet ID and sheet name for the Servicio Activo sync.
+    |
+    */
+    'sheets' => [
+        'spreadsheet_id' => env('GOOGLE_SHEETS_SPREADSHEET_ID', ''),
+        'sheet_name' => env('GOOGLE_SHEETS_SHEET_NAME', 'Hoja 1'),
+    ],
 ];
