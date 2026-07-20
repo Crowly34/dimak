@@ -107,7 +107,7 @@ class OrderImporter extends Importer
             'order_id' => $this->record->id,
             'device' => ($this->data['device'] ?? '') ?: 'Unknown',
             'device_serial' => ($this->data['device_serial'] ?? '') ?: null,
-            'device_password' => $password !== '' ? encrypt($password) : null,
+            'device_password' => $password !== '' ? $password : null,
             'description' => ($this->data['description'] ?? '') ?: null,
             'observations' => ($this->data['observations'] ?? '') ?: null,
             'status' => $status,

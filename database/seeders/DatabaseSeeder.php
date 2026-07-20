@@ -61,17 +61,6 @@ class DatabaseSeeder extends Seeder
         'iPad Pro',
     ];
 
-    /**
-     * Encryption lives at each write site rather than in a model cast, so the seeder
-     * must encrypt here too, exactly as the Filament form and sheet sync do.
-     */
-    private function maybeEncryptedPassword(): ?string
-    {
-        $password = fake()->optional(0.6)->randomElement(self::DEMO_PASSWORDS);
-
-        return is_string($password) ? encrypt($password) : null;
-    }
-
     public function run(): void
     {
         User::firstOrCreate(
@@ -135,7 +124,7 @@ class DatabaseSeeder extends Seeder
                         'location' => $location->value,
                         'description' => fake()->randomElement(self::FAULTS),
                         'observations' => fake()->optional(0.7)->randomElement(self::OBSERVATIONS),
-                        'device_password' => $this->maybeEncryptedPassword(),
+                        'device_password' => fake()->optional(0.6)->randomElement(self::DEMO_PASSWORDS),
                         'delivered_at' => $isDelivered
                             ? fake()->dateTimeBetween($receivedAt, 'now')
                             : null,

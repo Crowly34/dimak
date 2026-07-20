@@ -115,7 +115,7 @@ class ImportOrders extends Command
                 'order_id' => $order->id,
                 'device' => $device ?: 'Unknown',
                 'device_serial' => $deviceSerial ?: null,
-                'device_password' => $devicePassword !== '' ? encrypt($devicePassword) : null,
+                'device_password' => $devicePassword !== '' ? $devicePassword : null,
                 'description' => $description ?: null,
                 'observations' => $observations ?: null,
                 'status' => $status,

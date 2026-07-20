@@ -130,7 +130,7 @@ it('re-encrypts password when sheet password changes', function () {
     runSync();
 
     $ticket->refresh();
-    expect($ticket->decryptedDevicePassword)->toBe('newPassword!')
+    expect($ticket->device_password)->toBe('newPassword!')
         ->and($ticket->sheet_row_hash)->not->toBe($originalHash);
 });
 

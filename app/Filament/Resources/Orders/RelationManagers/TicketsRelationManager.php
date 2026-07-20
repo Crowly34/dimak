@@ -41,17 +41,7 @@ class TicketsRelationManager extends RelationManager
                 TextInput::make('device_password')
                     ->label('Device Password')
                     ->password()
-                    ->revealable()
-                    ->dehydrateStateUsing(fn (?string $state): ?string => $state !== null && $state !== '' ? encrypt($state) : null)
-                    ->afterStateHydrated(function (TextInput $component, mixed $state): void {
-                        if (is_string($state) && $state !== '') {
-                            try {
-                                $component->state(decrypt($state));
-                            } catch (\Throwable) {
-                                $component->state(null);
-                            }
-                        }
-                    }),
+                    ->revealable(),
                 Grid::make(2)->schema([
                     DatePicker::make('delivered_at'),
                     DatePicker::make('received_at')

@@ -16,11 +16,28 @@ test('ticket has many ticket status logs', function (): void {
     expect($ticket->statusLogs())->toBeInstanceOf(\Illuminate\Database\Eloquent\Relations\HasMany::class);
 });
 
-test('device_password is encrypted and decrypted', function (): void {
+test('device_password is stored encrypted and read back as plaintext', function (): void {
     $ticket = new Ticket;
-    $ticket->device_password = encrypt('secret123');
+    $ticket->device_password = 'secret123';
 
-    expect($ticket->decryptedDevicePassword)->toBe('secret123');
+    expect($ticket->device_password)->toBe('secret123')
+        ->and($ticket->getAttributes()['device_password'])->not->toBe('secret123')
+        ->and(decrypt($ticket->getAttributes()['device_password']))->toBe('secret123');
+});
+
+test('device_password reads back as null when it cannot be decrypted', function (): void {
+    $ticket = new Ticket;
+    $ticket->setRawAttributes(['device_password' => 'not-a-valid-payload']);
+
+    expect($ticket->device_password)->toBeNull();
+});
+
+test('an empty device_password is stored as null', function (): void {
+    $ticket = new Ticket;
+    $ticket->device_password = '';
+
+    expect($ticket->getAttributes()['device_password'])->toBeNull()
+        ->and($ticket->device_password)->toBeNull();
 });
 
 test('device_password is excluded from audits', function (): void {

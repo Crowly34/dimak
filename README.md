@@ -46,5 +46,5 @@ Client → hasMany → Order → hasMany → Ticket → hasMany → TicketStatus
 ## Key Conventions
 
 - **Status changes** go through the Filament "Change Status" action, not direct `$ticket->update()`. This creates a `TicketStatusLog` and suppresses the generic audit event to avoid double-logging.
-- **Device passwords** are encrypted at rest. Read via `$ticket->decryptedDevicePassword` (returns `null` on failure, never throws).
+- **Device passwords** are encrypted at rest by an Eloquent accessor/mutator on `Ticket`, so no call site can persist plaintext by forgetting to encrypt. Reads return `null` if a value cannot be decrypted rather than throwing.
 - **Auditing** tracks all Order and Ticket changes except `device_password` (excluded for privacy).

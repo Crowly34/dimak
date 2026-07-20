@@ -97,7 +97,7 @@ class SyncOrdersFromSheet
             'order_id' => $order->id,
             'device' => $row->device ?: 'Unknown',
             'device_serial' => $row->deviceSerial ?: null,
-            'device_password' => $row->devicePassword !== '' ? encrypt($row->devicePassword) : null,
+            'device_password' => $row->devicePassword !== '' ? $row->devicePassword : null,
             'description' => $row->description ?: null,
             'observations' => $row->observations ?: null,
             'status' => $status,
@@ -124,7 +124,7 @@ class SyncOrdersFromSheet
         $ticket->update([
             'device' => $row->device ?: 'Unknown',
             'device_serial' => $row->deviceSerial ?: null,
-            'device_password' => $row->devicePassword !== '' ? encrypt($row->devicePassword) : null,
+            'device_password' => $row->devicePassword !== '' ? $row->devicePassword : null,
             'description' => $row->description ?: null,
             'observations' => $row->observations ?: null,
             'status' => $status,

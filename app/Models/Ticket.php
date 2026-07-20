@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Enums\TicketLocation;
 use App\Enums\TicketStatus;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -46,21 +47,33 @@ class Ticket extends Model implements Auditable
         ];
     }
 
-    public function getDecryptedDevicePasswordAttribute(): ?string
+    /**
+     * Encrypts on write and decrypts on read, so no call site can persist a
+     * plaintext password by forgetting to encrypt. Reads fall back to null
+     * rather than throwing, so one undecryptable row cannot break the panel.
+     *
+     * @return Attribute<?string, ?string>
+     */
+    protected function devicePassword(): Attribute
     {
-        $password = $this->device_password;
+        return Attribute::make(
+            get: function (mixed $value): ?string {
+                if (! is_string($value) || $value === '') {
+                    return null;
+                }
 
-        if (! is_string($password) || $password === '') {
-            return null;
-        }
+                try {
+                    $decrypted = decrypt($value);
+                } catch (\Throwable) {
+                    return null;
+                }
 
-        try {
-            $decrypted = decrypt($password);
-
-            return is_string($decrypted) ? $decrypted : null;
-        } catch (\Throwable) {
-            return null;
-        }
+                return is_string($decrypted) ? $decrypted : null;
+            },
+            set: fn (mixed $value): ?string => is_string($value) && $value !== ''
+                ? encrypt($value)
+                : null,
+        );
     }
 
     /** @return BelongsTo<Order, $this> */
