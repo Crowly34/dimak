@@ -7,6 +7,10 @@ use App\Models\Order;
 use App\Models\Ticket;
 use Illuminate\Console\Command;
 
+/**
+ * @deprecated Use sheets:sync (SyncOrdersFromSheet action) for Google Sheets sync.
+ *             Kept as fallback for one-off CSV imports.
+ */
 class ImportOrders extends Command
 {
     protected $signature = 'import:orders
