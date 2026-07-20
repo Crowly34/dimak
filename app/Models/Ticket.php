@@ -31,10 +31,11 @@ class Ticket extends Model implements Auditable
         'observations',
         'status',
         'location',
+        'sheet_row_hash',
     ];
 
     /** @var array<string> */
-    protected array $auditExclude = ['device_password'];
+    protected array $auditExclude = ['device_password', 'sheet_row_hash'];
 
     protected function casts(): array
     {

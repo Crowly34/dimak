@@ -1,0 +1,11 @@
+{
+    "normal": ["1001", "MacBook Pro", "Juan Garcia", "3312345678", "15/01/2025", "Screen broken", "C02ABC123", "secret123", "en proceso"],
+    "delivered": ["1002", "iMac", "Maria Lopez", "3398765432", "20/02/2025", "No enciende", "", "password1", "Equipo entregado al cliente"],
+    "no_repair": ["1003", "Mac mini", "Pedro Ruiz", "", "01/03/2025", "Water damage", "D12XYZ", "", "No se pudo reparar, board dañado"],
+    "waiting_part": ["1004", "MacBook Air", "Ana Torres", "3355551234/3355559876", "10/04/2025", "Keyboard issue", "", "abc123", "Esperando pieza de teclado"],
+    "no_folio": ["", "iPhone 15", "Carlos Mendez", "3311112222", "05/05/2025", "Battery", "", "", ""],
+    "period_folio": ["1.598", "iMac", "Sofia Ramirez", "3312223344", "5/08/2013", "se apaga", "", "clave123", ""],
+    "special_folio": ["3600\u00d1", "MacBook", "Roberto Silva", "", "12/12/2024", "Fan noise", "", "", "laboratorio"],
+    "empty": ["", "", "", "", "", "", "", "", ""],
+    "with_password": ["1005", "Mac Pro", "Elena Vega", "3399887766", "01/06/2025", "Upgrade RAM", "F5GHIJ", "my$ecretP@ss!", ""]
+}

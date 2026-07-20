@@ -22,6 +22,7 @@ return new class extends Migration
             $table->text('observations')->nullable();
             $table->string('status')->default('pending_diagnosis');
             $table->string('location')->default('shop');
+            $table->string('sheet_row_hash', 32)->nullable()->after('location');
             $table->decimal('price', 10, 2)->nullable();
             $table->boolean('paid')->default(false);
             $table->timestamps();
