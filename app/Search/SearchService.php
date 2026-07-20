@@ -7,10 +7,12 @@ use App\Models\Client;
 use App\Models\Order;
 use App\Models\SearchLog;
 use Illuminate\Database\Eloquent\Builder;
+use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Laravel\Ai\Responses\StructuredAgentResponse;
 
 class SearchService
 {
@@ -34,7 +36,14 @@ class SearchService
             try {
                 $result = (new QueryParser)->prompt($input);
 
-                return SearchQuery::fromArray($result->toArray(), $input);
+                if (! $result instanceof StructuredAgentResponse) {
+                    return SearchQuery::fallback($input);
+                }
+
+                /** @var array<string, mixed> $data */
+                $data = $result->toArray();
+
+                return SearchQuery::fromArray($data, $input);
             } catch (\Throwable) {
                 return SearchQuery::fallback($input);
             }
@@ -49,7 +58,10 @@ class SearchService
     public function searchOrders(SearchQuery $query, int $limit = 50): Collection
     {
         if ($query->rawQuery === '') {
-            return collect();
+            /** @var Collection<int, Order> $empty */
+            $empty = collect();
+
+            return $empty;
         }
 
         $builder = Order::query()->with(['client', 'tickets']);
@@ -102,7 +114,10 @@ class SearchService
     public function searchClients(SearchQuery $query, int $limit = 50): Collection
     {
         if ($query->rawQuery === '') {
-            return collect();
+            /** @var Collection<int, Client> $empty */
+            $empty = collect();
+
+            return $empty;
         }
 
         $builder = Client::query()->with(['orders.tickets']);
@@ -154,6 +169,11 @@ class SearchService
         Cache::put($cacheKey, $log, 10);
     }
 
+    /**
+     * @template TModel of Model
+     *
+     * @param  Builder<TModel>  $query
+     */
     private function applyFuzzyName(Builder $query, string $column, string $term): void
     {
         if ($this->isPostgres()) {
@@ -166,7 +186,10 @@ class SearchService
         }
     }
 
-    /** @return Collection<int, Order> */
+    /**
+     * @param  Builder<Order>  $builder
+     * @return Collection<int, Order>
+     */
     private function fallbackOrderSearch(Builder $builder, string $rawQuery, int $limit): Collection
     {
         return $builder->where(function ($q) use ($rawQuery) {
@@ -176,7 +199,10 @@ class SearchService
         })->latest('received_at')->limit($limit)->get();
     }
 
-    /** @return Collection<int, Client> */
+    /**
+     * @param  Builder<Client>  $builder
+     * @return Collection<int, Client>
+     */
     private function fallbackClientSearch(Builder $builder, string $rawQuery, int $limit): Collection
     {
         return $builder->where(function ($q) use ($rawQuery) {
