@@ -27,6 +27,9 @@ class ClientResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedUsers;
 
+    /**
+     * @return Collection<int, GlobalSearchResult>
+     */
     public static function getGlobalSearchResults(string $search): Collection
     {
         $service = app(SearchService::class);

@@ -73,9 +73,9 @@ class OrderImporter extends Importer
 
     public function resolveRecord(): ?Order
     {
-        $folio = $this->data['folio'] ?? '';
+        $folio = $this->stringValue('folio');
 
-        if ($folio === '' || $folio === null) {
+        if ($folio === '') {
             return null;
         }
 
@@ -84,19 +84,23 @@ class OrderImporter extends Importer
         }
 
         $client = $this->findOrCreateClient(
-            $this->data['client_name'] ?? '',
-            $this->data['phone'] ?? '',
+            $this->stringValue('client_name'),
+            $this->stringValue('phone'),
         );
 
         $order = new Order;
-        $order->client_id = $client->id;
+        $order->client()->associate($client);
 
         return $order;
     }
 
     protected function afterSave(): void
     {
-        [$status, $location] = $this->inferStatusAndLocation($this->data['observations'] ?? '');
+        if (! $this->record instanceof Order) {
+            return;
+        }
+
+        [$status, $location] = $this->inferStatusAndLocation($this->stringValue('observations'));
         $password = $this->data['device_password'] ?? '';
 
         Ticket::create([
@@ -189,6 +193,13 @@ class OrderImporter extends Importer
         }
 
         return [$status, $location];
+    }
+
+    private function stringValue(string $key): string
+    {
+        $value = $this->data[$key] ?? '';
+
+        return is_string($value) ? $value : '';
     }
 
     private function findOrCreateClient(string $name, string $rawPhone): Client

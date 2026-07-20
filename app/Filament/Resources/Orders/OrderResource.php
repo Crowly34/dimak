@@ -8,7 +8,9 @@ use App\Filament\Resources\Orders\Pages\ListOrders;
 use App\Filament\Resources\Orders\RelationManagers\TicketsRelationManager;
 use App\Filament\Resources\Orders\Schemas\OrderForm;
 use App\Filament\Resources\Orders\Tables\OrdersTable;
+use App\Models\Client;
 use App\Models\Order;
+use App\Models\Ticket;
 use App\Search\SearchService;
 use BackedEnum;
 use Filament\GlobalSearch\GlobalSearchResult;
@@ -29,6 +31,9 @@ class OrderResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedClipboardDocumentList;
 
+    /**
+     * @return Collection<int, GlobalSearchResult>
+     */
     public static function getGlobalSearchResults(string $search): Collection
     {
         $service = app(SearchService::class);
@@ -37,11 +42,19 @@ class OrderResource extends Resource
         $service->log($query, orderResults: $orders->count());
 
         return $orders->map(function (Order $order) {
-            $devices = $order->tickets->pluck('device')->filter()->join(', ');
-            $statuses = $order->tickets->pluck('status')->map->getLabel()->join(', ');
+            $devices = $order->tickets
+                ->map(fn (Ticket $ticket) => $ticket->device)
+                ->filter(fn (string $device) => $device !== '')
+                ->implode(', ');
+            $statuses = $order->tickets
+                ->map(fn (Ticket $ticket) => $ticket->status->getLabel())
+                ->implode(', ');
+
+            $client = $order->client;
+            $clientName = $client instanceof Client ? $client->name : 'Unknown';
 
             return new GlobalSearchResult(
-                title: "#{$order->folio} — {$order->client->name}",
+                title: "#{$order->folio} — {$clientName}",
                 url: static::getUrl('edit', ['record' => $order]),
                 details: [
                     'Device(s)' => $devices ?: '—',
