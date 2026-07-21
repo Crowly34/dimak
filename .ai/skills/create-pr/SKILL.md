@@ -27,13 +27,14 @@ description: "Opens a pull request as a draft by default, pulling the human-read
 
 **Title:** `AEO-NN: <ticket title>` — the tracker id plus the ticket title exactly as written.
 
-**Body sections, in this order.** There is no PR template file in this repo — don't go looking for one; the sections below are defined by this skill, not read from a file.
+**Body:** read `.github/pull_request_template.md` and fill it in. It is the single source of truth for the body's shape — do not restate its sections here, and do not invent your own. If the template changes, this skill needs no edit.
 
-1. **Ticket link** — the Linear issue URL from Step 1.
-2. **Technical description** — the section that carries the actual value. Lead with *what changed and why* in a few sentences or tight bullets. Call out only non-obvious decisions and trade-offs. Explicitly do **not** restate the diff as a file inventory or a line-count log — that's what `git diff` is for. Keep it short.
-3. **Change type** — a checklist (feature / fix / refactor / chore / docs / breaking change).
-4. **Screenshots** — only when the change has a visible UI component.
-5. **Deployment steps** — only when steps genuinely exist (new env var, migration to run manually, cache to clear). Omit the section entirely otherwise.
+Two rules the template can't enforce on its own:
+
+- **Delete every section you have nothing real for.** The template says so in a comment; honour it. An empty heading, or one padded to look filled, is worse than an absent one.
+- **`## Why` is the only section that requires actual writing.** Lead with the problem and why this is the right shape of fix. Never restate the diff as a file inventory or a line-count log — `git diff` already does that, better.
+
+Fill `## How I verified it` from what you actually ran, not what you intended to. If nothing was verified at runtime, tick the last box and give the honest reason — an unchecked list of aspirations is worse than an admission.
 
 ## Step 3: Open It
 
