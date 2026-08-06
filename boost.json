@@ -15,6 +15,12 @@
     "sail": false,
     "skills": [
         "pest-testing",
-        "tailwindcss-development"
+        "tailwindcss-development",
+        "create-pr",
+        "git-commit",
+        "grill-me",
+        "self-review",
+        "starting-work",
+        "ticket-discovery"
     ]
 }
