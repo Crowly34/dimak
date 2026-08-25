@@ -5,7 +5,7 @@ use App\Integrations\GoogleSheets\GoogleSheetsClient;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Collection;
 
-uses(RefreshDatabase::class);
+pest()->use(RefreshDatabase::class);
 
 function fakeSheetClientForCommand(array $rawRows): void
 {
@@ -41,7 +41,7 @@ it('handles API errors gracefully and returns failure', function () {
 
         public function fetchRows(): Collection
         {
-            throw new \RuntimeException('API unreachable');
+            throw new RuntimeException('API unreachable');
         }
     });
 

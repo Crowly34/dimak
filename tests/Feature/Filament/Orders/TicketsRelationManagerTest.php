@@ -9,7 +9,7 @@ use App\Models\TicketStatusLog;
 use App\Models\User;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-uses(RefreshDatabase::class);
+pest()->use(RefreshDatabase::class);
 
 beforeEach(function (): void {
     $this->actingAs(User::factory()->create());
@@ -89,8 +89,8 @@ test('change status action creates a ticket status log', function (): void {
         ])
         ->assertHasNoTableActionErrors();
 
-    expect(TicketStatusLog::where('ticket_id', $ticket->id)->exists())->toBeTrue();
-    expect($ticket->fresh()->status)->toBe(TicketStatus::InProgress);
+    expect(TicketStatusLog::where('ticket_id', $ticket->id)->exists())->toBeTrue()
+        ->and($ticket->fresh()->status)->toBe(TicketStatus::InProgress);
 });
 
 test('ticket form validates device is required', function (): void {
