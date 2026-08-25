@@ -9,7 +9,7 @@ use Database\Seeders\DatabaseSeeder;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Facades\Artisan;
 
-uses(RefreshDatabase::class);
+pest()->use(RefreshDatabase::class);
 
 test('database seeder produces a convincing demo dataset', function (): void {
     Artisan::call('db:seed', ['--class' => DatabaseSeeder::class]);

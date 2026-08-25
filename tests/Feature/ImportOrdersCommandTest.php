@@ -5,7 +5,7 @@ use App\Models\Order;
 use App\Models\Ticket;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-uses(RefreshDatabase::class);
+pest()->use(RefreshDatabase::class);
 
 /**
  * Writes a temporary CSV file with 4 skipped header rows followed by $rows.
@@ -75,8 +75,8 @@ test('deduplicates client by phone number', function (): void {
 
     $this->artisan('import:orders', ['file' => $path])->assertSuccessful();
 
-    expect(Client::count())->toBe(1);
-    expect(Order::where('folio', '3001')->first()?->client_id)->toBe($existing->id);
+    expect(Client::count())->toBe(1)
+        ->and(Order::where('folio', '3001')->first()?->client_id)->toBe($existing->id);
 
     unlink($path);
 });
@@ -90,8 +90,8 @@ test('deduplicates client by name when phone does not match', function (): void 
 
     $this->artisan('import:orders', ['file' => $path])->assertSuccessful();
 
-    expect(Client::count())->toBe(1);
-    expect(Order::where('folio', '4001')->first()?->client_id)->toBe($existing->id);
+    expect(Client::count())->toBe(1)
+        ->and(Order::where('folio', '4001')->first()?->client_id)->toBe($existing->id);
 
     unlink($path);
 });
@@ -105,8 +105,8 @@ test('dry-run outputs rows without writing to the database', function (): void {
         ->expectsOutputToContain('[DRY-RUN]')
         ->assertSuccessful();
 
-    expect(Order::count())->toBe(0);
-    expect(Ticket::count())->toBe(0);
+    expect(Order::count())->toBe(0)
+        ->and(Ticket::count())->toBe(0);
 
     unlink($path);
 });

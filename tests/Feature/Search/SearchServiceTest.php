@@ -8,7 +8,7 @@ use App\Models\Ticket;
 use App\Search\SearchService;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 
-uses(RefreshDatabase::class);
+pest()->use(RefreshDatabase::class);
 
 beforeEach(function () {
     $this->service = new SearchService;
@@ -58,7 +58,7 @@ it('falls back to ILIKE search by folio', function () {
     $order = Order::factory()->for($client)->create(['folio' => 'ABC-123']);
     Ticket::factory()->for($order)->create();
 
-    QueryParser::fake(fn () => throw new \RuntimeException('AI is down'));
+    QueryParser::fake(fn () => throw new RuntimeException('AI is down'));
 
     $query = $this->service->parse('ABC-123');
     $results = $this->service->searchOrders($query);
@@ -69,7 +69,7 @@ it('falls back to ILIKE search by folio', function () {
 });
 
 it('handles AI failure gracefully with fallback', function () {
-    QueryParser::fake(fn () => throw new \RuntimeException('API error'));
+    QueryParser::fake(fn () => throw new RuntimeException('API error'));
 
     $query = $this->service->parse('anything');
 

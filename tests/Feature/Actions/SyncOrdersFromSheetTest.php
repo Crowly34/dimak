@@ -1,13 +1,15 @@
 <?php
 
+use App\Actions\SyncOrdersFromSheet;
 use App\DTOs\SheetRow;
+use App\DTOs\SyncResult;
 use App\Integrations\GoogleSheets\GoogleSheetsClient;
 use App\Models\Client;
 use App\Models\Order;
 use Illuminate\Foundation\Testing\RefreshDatabase;
 use Illuminate\Support\Collection;
 
-uses(RefreshDatabase::class);
+pest()->use(RefreshDatabase::class);
 
 function sheetRow(string $key): array
 {
@@ -33,9 +35,9 @@ function fakeSheetClient(array $rawRows): void
     test()->instance(GoogleSheetsClient::class, $mock);
 }
 
-function runSync(): \App\DTOs\SyncResult
+function runSync(): SyncResult
 {
-    return app(\App\Actions\SyncOrdersFromSheet::class)();
+    return app(SyncOrdersFromSheet::class)();
 }
 
 // --- Create ---
@@ -83,8 +85,8 @@ it('matches an existing client by phone', function () {
     fakeSheetClient([sheetRow('normal')]);
     runSync();
 
-    expect(Client::count())->toBe(1);
-    expect(Order::where('folio', '1001')->first()->client_id)->toBe($existing->id);
+    expect(Client::count())->toBe(1)
+        ->and(Order::where('folio', '1001')->first()->client_id)->toBe($existing->id);
 });
 
 it('matches an existing client by name when phone differs', function () {
@@ -93,8 +95,8 @@ it('matches an existing client by name when phone differs', function () {
     fakeSheetClient([sheetRow('normal')]);
     runSync();
 
-    expect(Client::count())->toBe(1);
-    expect(Order::where('folio', '1001')->first()->client_id)->toBe($existing->id);
+    expect(Client::count())->toBe(1)
+        ->and(Order::where('folio', '1001')->first()->client_id)->toBe($existing->id);
 });
 
 // --- Update ---
@@ -110,9 +112,8 @@ it('updates a ticket when hash differs', function () {
 
     $result = runSync();
 
-    expect($result->updated)->toBe(1);
-    expect(Order::where('folio', '1001')->first()->tickets->first()->observations)
-        ->toBe('Updated observations text');
+    expect($result->updated)->toBe(1)
+        ->and(Order::where('folio', '1001')->first()->tickets->first()->observations)->toBe('Updated observations text');
 });
 
 it('re-encrypts password when sheet password changes', function () {
@@ -174,8 +175,8 @@ it('skips empty rows', function () {
 
     $result = runSync();
 
-    expect($result->created)->toBe(1);
-    expect(Order::count())->toBe(1);
+    expect($result->created)->toBe(1)
+        ->and(Order::count())->toBe(1);
 });
 
 // --- Folio ---
