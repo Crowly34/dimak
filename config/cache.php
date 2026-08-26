@@ -111,8 +111,10 @@ return [
     |
     | Restricts which classes may be restored when a serializing cache store
     | unserializes a value, so a leaked APP_KEY cannot be used to smuggle a
-    | deserialization gadget chain through the cache. Anything not listed here
-    | comes back as __PHP_Incomplete_Class rather than the original object.
+    | deserialization gadget chain through the cache. An unlisted class comes
+    | back as __PHP_Incomplete_Class, which a typed property rejects with a
+    | fatal TypeError. Only the top-level value is checked, so an unlisted
+    | class nested inside a listed one is restored incomplete and unreported.
     |
     | Carbon covers the sheet sync, which caches a now() instance directly.
     | Eloquent attributes serialize as raw scalars rather than cast objects,
