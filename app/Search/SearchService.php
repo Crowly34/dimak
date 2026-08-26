@@ -173,6 +173,7 @@ class SearchService
      * @template TModel of Model
      *
      * @param  Builder<TModel>  $query
+     * @param  literal-string  $column  Interpolated into raw SQL, so it may never carry a runtime value.
      */
     private function applyFuzzyName(Builder $query, string $column, string $term): void
     {
