@@ -52,6 +52,12 @@ Homestead.yaml
 /.mcp.json
 /opencode.json
 
+# Boost-generated skill mirrors — the canonical source is .ai/skills, which is
+# tracked. Boost copies it into each configured agent's skills dir on
+# `php artisan boost:update`, alongside the skills it ships itself.
+/.agents/
+/.github/skills/
+
 # PHP tools
 .phpactor.json
 /AGENTS.md
