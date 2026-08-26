@@ -3,7 +3,6 @@
 declare(strict_types=1);
 
 use Pest\Rector\Rules\SimplifyToLiteralBooleanRector;
-use Pest\Rector\Rules\UseToBeEmptyRector;
 use Pest\Rector\Set\PestSetList;
 use Rector\Config\RectorConfig;
 
@@ -17,11 +16,13 @@ return RectorConfig::configure()
     ->withSets([
         PestSetList::CODING_STYLE,
     ])
-    // Both rules rewrite toBe('') into toBeEmpty(), which also passes for 0,
-    // '0', [] and false. SheetRowTest pins the exact value absent spreadsheet
-    // columns coerce to, so the rewrite drops the guarantee under test. They
-    // are skipped as a pair because either will fire once the other is gone.
+    // This rule rewrites toBe('') into toBeEmpty(). SheetRow types the columns
+    // it fills as string, so the rewrite widens the assertion to also accept
+    // '0' -- and that one case exists to pin what an absent column becomes.
+    // Scoped to the file rather than skipped outright: the rule is correct
+    // everywhere the exact empty value carries no meaning.
     ->withSkip([
-        SimplifyToLiteralBooleanRector::class,
-        UseToBeEmptyRector::class,
+        SimplifyToLiteralBooleanRector::class => [
+            __DIR__.'/tests/Unit/DTOs/SheetRowTest.php',
+        ],
     ]);
