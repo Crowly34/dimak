@@ -5,6 +5,7 @@
         "opencode",
         "copilot"
     ],
+    "cloud": false,
     "guidelines": true,
     "herd_mcp": true,
     "mcp": true,
@@ -14,7 +15,10 @@
     ],
     "sail": false,
     "skills": [
-        "pest-testing",
+        "infer-conventions",
+        "ai-sdk-development",
+        "laravel-best-practices",
+        "testing-best-practices",
         "tailwindcss-development",
         "create-pr",
         "git-commit",
