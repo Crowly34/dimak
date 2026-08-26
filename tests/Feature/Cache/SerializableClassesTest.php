@@ -10,10 +10,9 @@ use Illuminate\Support\Facades\Cache;
 
 pest()->use(RefreshDatabase::class);
 
-// phpunit.xml pins CACHE_STORE=array, and the array store hands back the
-// original instance without ever serializing. These tests reach for the
-// database store on purpose: it is what .env configures and the only place
-// cache.serializable_classes has any effect.
+// Named rather than taken from the suite default, so these tests keep
+// covering the allow list even if CACHE_STORE moves back to a store that
+// hands back the original instance instead of serializing it.
 function serializingCache(): Repository
 {
     return Cache::store('database');
