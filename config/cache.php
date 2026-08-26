@@ -1,5 +1,8 @@
 <?php
 
+use App\Models\SearchLog;
+use App\Search\SearchQuery;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Str;
 
 return [
@@ -99,6 +102,29 @@ return [
             ],
         ],
 
+    ],
+
+    /*
+    |--------------------------------------------------------------------------
+    | Serializable Cache Classes
+    |--------------------------------------------------------------------------
+    |
+    | Restricts which classes may be restored when a serializing cache store
+    | unserializes a value, so a leaked APP_KEY cannot be used to smuggle a
+    | deserialization gadget chain through the cache. Anything not listed here
+    | comes back as __PHP_Incomplete_Class rather than the original object.
+    |
+    | Carbon covers the sheet sync, which caches a now() instance directly.
+    | Eloquent attributes serialize as raw scalars rather than cast objects,
+    | so SearchLog needs no nested entry, and PHP exempts backed enums from
+    | the restriction entirely, so TicketStatus inside SearchQuery needs none.
+    |
+    */
+
+    'serializable_classes' => [
+        SearchLog::class,
+        SearchQuery::class,
+        Carbon::class,
     ],
 
     /*
